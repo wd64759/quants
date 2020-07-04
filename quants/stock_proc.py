@@ -1,6 +1,7 @@
 import pandas as pd
 import tushare as ts
 from sqlalchemy import create_engine
+from config_loader import cf as config
 
 
 import time
@@ -16,7 +17,7 @@ class StockFetcher(object):
     '''
     def __init__(self):
         super().__init__()
-        token = r'183ce5fbbbba997dd702e03c838193db1e55f291e9d600ca8ab6f869'
+        token = config.get('STOCK_SERVER', 'token')
         ts.set_token(token)
         self.pro = ts.pro_api()
     
@@ -63,7 +64,8 @@ class StockLoader(object):
     '''
     def __init__(self):
         super().__init__()
-        self.engine = create_engine('mysql+mysqlconnector://root:admin123@localhost:3306/ts_test', encoding='utf-8')
+        dbURL = config.get('MYSQL_DB', 'conn')
+        self.engine = create_engine(dbURL, encoding='utf-8')
         self.data_dict = {
             'stocks':'base_stocks', 
             'tickers': 'tickers', 

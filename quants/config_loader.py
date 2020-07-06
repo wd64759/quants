@@ -6,6 +6,9 @@ config_file = os.path.join(root_dir, 'quants', 'config.ini')
 cf=configparser.ConfigParser()
 cf.read(config_file)
 
-if __name__ == '__main__':
+def main():
     print(config_file)
     print(cf.get('STOCK_SERVER', 'token'))
+
+if __name__ == '__main__':
+    main()    

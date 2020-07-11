@@ -22,8 +22,8 @@ class StockFetcher(object):
         self.pro = ts.pro_api()
     
     def fetch_calendar(self, start_date, end_date=None):
-        now_str = datetime.now().strftime('%Y%m%d') if end_date is None else end_date.strftime('%Y%m%d')
-        calDF = self.pro.trade_cal(exchange='', start_date=start_date.strftime('%Y%m%d'), end_date=now_str)
+        now_str = datetime.now().strftime('%Y%m%d') if end_date is None else end_date
+        calDF = self.pro.trade_cal(exchange='', start_date=start_date, end_date=now_str)
         openDF = calDF.loc[calDF["is_open"] == 1]
         return openDF['cal_date'].tolist()
     
@@ -190,7 +190,7 @@ def refreshStockInfo():
     sLoader.save_stock_basic(sFetcher.fetch_stock_basic())
 
 def main():
-    start_date, end_date = '20200707', '20200707'
+    start_date, end_date = '20200707', '20200710'
     refreshTickers(start_date, end_date)
     refreshStockInfo()
     # sLoader = StockLoader()

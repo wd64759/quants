@@ -127,18 +127,25 @@ class AnaUtil(object):
 
 ana = AnaUtil()
 
-def find_mkt_trend(category='market', start_date=datetime.now() - timedelta(days=5), end_date=datetime.now()):
-    # .strftime('%Y%m%d')
-    df = ana.top_category(category='market', start_date=start_date, end_date=end_date)
+'''
+    return a date range
+'''
+def get_dt_range(end_dt=datetime.now(), days_span=5):
+    start_dt = end_dt - timedelta(days=days_span)
+    return (start_dt.strftime('%Y%m%d'), end_dt.strftime('%Y%m%d'))
+
+
+def find_mkt_trend(date_range=get_dt_range(), category='market'):
+    df = ana.top_category(category='market', start_date=date_range[0], end_date=date_range[1])
     ana.g_line(df)
 
 def find_ticks_trend(ts_code):
     ana.g_tickers(ts_code)
 
-def find_mkt_share(category='industry', tpNum=50, start_date=datetime.now() - timedelta(days=5), end_date=datetime.now()):
-    df = ana.top_category(category=category, tpNum=tpNum, start_date=start_date, end_date=end_date).fillna(0)
+def find_mkt_share(category='industry', tpNum=50, date_range=get_dt_range()):
+    df = ana.top_category(category=category, tpNum=tpNum, start_date=date_range[0], end_date=date_range[0]).fillna(0)
     del df['trade_date'] 
-    ana.g_pie(df.sum(), title='{0} to {1} '.format(start_date.strftime('%b %d'), end_date.strftime('%b %d')))
+    ana.g_pie(df.sum(), title='{0} to {1}'.format(date_range[0], date_range[1]))
 
 def mkt_filter(df):
     ''' 主板，中小板，创业板， 科创板 '''
@@ -148,12 +155,9 @@ def main():
     # df = ana.top_performers(trade_date='20200701')
     # print(df[['name', 'market', 'industry', 'list_date', 'pct_chg', 'vol', 'open', 'high', 'low', 'close', 'pre_close']])
     # ana.g_tickers('300841.SZ')
-
     # ana.set_filter(mkt_filter)
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=8)
-    find_mkt_trend(start_date=start_date, end_date=end_date)
-    # find_mkt_share(tpNum=100, start_date=start_date, end_date=end_date)
+    # find_mkt_trend(date_range=get_dt_range(days_span=10))
+    find_mkt_share(tpNum=100)
 
 if __name__ == '__main__':
     main()

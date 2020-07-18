@@ -4,7 +4,7 @@ import os
 root_dir = os.path.dirname(os.path.abspath('.'))
 config_file = os.path.join(root_dir, 'quants', 'config.ini')
 if not os.path.isfile(config_file):
-    config_file = 'D:\code\quants\quants\config.ini'
+    config_file = r'D:\code\quants\quants\config.ini'
     
 cf=configparser.ConfigParser()
 cf.read(config_file)

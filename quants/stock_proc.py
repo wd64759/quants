@@ -65,7 +65,7 @@ class StockLoader(object):
     def __init__(self):
         super().__init__()
         dbURL = config.get('MYSQL_DB', 'conn')
-        self.engine = create_engine(dbURL, encoding='utf-8')
+        self.engine = create_engine(dbURL, encoding='utf-8', connect_args={'auth_plugin': 'mysql_native_password'})
         self.data_dict = {
             'stocks':'base_stocks', 
             'tickers': 'tickers', 
@@ -190,7 +190,7 @@ def refreshStockInfo():
     sLoader.save_stock_basic(sFetcher.fetch_stock_basic())
 
 def main():
-    start_date, end_date = '20200707', '20200710'
+    start_date, end_date = '20200713', '20200717'
     refreshTickers(start_date, end_date)
     refreshStockInfo()
     # sLoader = StockLoader()

@@ -5,7 +5,7 @@ from datetime import date, datetime
 from sqlalchemy import create_engine
 from pprint import pprint
 
-class Stock(object):
+class TradeDays(object):
     def __init__(self, code, base_date=None):
         self.__ts_code = code
         self.__init_hist()
@@ -37,8 +37,8 @@ class Stock(object):
         return rs
 
 if __name__ == '__main__':
-    stock = Stock(code='000725.SZ')
-    pprint(len(stock))
+    trade_days = TradeDays(code='000725.SZ')
+    pprint(len(trade_days))
     # x = stock.get_hist(start_dt=datetime.strptime('20200701', '%Y%m%d').date())
     # print([x for x in stock][:10])
-    print(stock[-1])
+    print(trade_days[-1])

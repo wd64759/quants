@@ -24,7 +24,9 @@ class TradeLoopBack(object):
                 self.trade_strategy.sell_strategy(ind, trade_day, self.trade_days)
 
 if __name__ == '__main__':
-    trade_days = TradeDays(code='000725.SZ', base_date='20200101')
+    # 000001.SZ,  000725.SZ
+    trade_days = TradeDays(code='000001.SZ', base_date='20200101')
     loopback = TradeLoopBack(trade_days, GamblerStrategy())
     loopback.execute_trade()
     pprint('{:.2f}%'.format(reduce(lambda a, b: a + b, loopback.profit_days)))
+

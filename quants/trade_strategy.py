@@ -18,16 +18,19 @@ class GamblerStrategy(TradeStrategyBase):
     s_keep_stock_threhold = 20
     def __init__(self):
         self.keep_days = 0
-        self.__buy_change_threshold = 0.07
+        # 7%
+        self.__buy_change_threshold = 7
 
     def buy_strategy(self, trade_ind, trade_day, trade_days):
         if self.keep_days == 0 and trade_day.change > self.__buy_change_threshold:
+            pprint('buy on {}, at {:.2f}'.format(trade_day.date, trade_day.price))
             self.keep_days = 1
         elif self.keep_days > 0:
             self.keep_days += 1
 
     def sell_strategy(self, trade_ind, trade_day, trade_days):
         if self.keep_days >= GamblerStrategy.s_keep_stock_threhold:
+            pprint('sell on {}, at {:.2f}'.format(trade_day.date, trade_day.price))
             self.keep_days = 0
 
     @property

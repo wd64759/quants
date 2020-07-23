@@ -14,17 +14,17 @@ class TradeLoopBack(object):
     use enumerate to get index of a iterator object with its value
     '''
     def execute_trade(self):
-        for ind, day in enumerate(self.trade_days):
+        for ind, trade_day in enumerate(self.trade_days):
             if self.trade_strategy.keep_days > 0:
-                self.profit_days.append(day.change)
+                self.profit_days.append(trade_day.change)
             if hasattr(self.trade_strategy, 'buy_strategy'):
-                self.trade_strategy.buy_strategy(ind, day, self.trade_days)
+                self.trade_strategy.buy_strategy(ind, trade_day, self.trade_days)
             
             if hasattr(self.trade_strategy, 'sell_strategy'):
-                self.trade_strategy.sell_strategy(ind, day, self.trade_days)
+                self.trade_strategy.sell_strategy(ind, trade_day, self.trade_days)
 
 if __name__ == '__main__':
-    trade_days = TradeDays(code='000725.SZ')
+    trade_days = TradeDays(code='000725.SZ', base_date='20200101')
     loopback = TradeLoopBack(trade_days, GamblerStrategy())
     loopback.execute_trade()
-    pprint(reduce(lambda a, b: a + b, loopback.profit_days) * 100)
+    pprint('{:.2f}%'.format(reduce(lambda a, b: a + b, loopback.profit_days)))

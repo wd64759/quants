@@ -1,8 +1,10 @@
 from pprint import pprint
 from functools import reduce
+from itertools import product
 
-from stock import TradeDays
-from trade_strategy import GamblerStrategy
+from trade_days import TradeDays
+from trade_strategies.base_strategy import GamblerStrategy
+from trade_strategies.mean_strategy import MeanStrategy
 
 class TradeLoopBack(object):
     def __init__(self, trade_days, trade_strategy):
@@ -22,11 +24,20 @@ class TradeLoopBack(object):
             
             if hasattr(self.trade_strategy, 'sell_strategy'):
                 self.trade_strategy.sell_strategy(ind, trade_day, self.trade_days)
+    
+    '''
+    get total profiles
+    '''
+    def get_total_profit(self):
+        return 0.0 if len(self.profit_days) == 0 else reduce(lambda a,b: a + b, self.profit_days)
 
 if __name__ == '__main__':
     # 000001.SZ,  000725.SZ
-    trade_days = TradeDays(code='000001.SZ', base_date='20200101')
-    loopback = TradeLoopBack(trade_days, GamblerStrategy())
+    trade_days = TradeDays(code='000725.SZ', base_date='20200101')
+    chosen_strategy = MeanStrategy()
+    loopback = TradeLoopBack(trade_days, chosen_strategy)
     loopback.execute_trade()
-    pprint('{:.2f}%'.format(reduce(lambda a, b: a + b, loopback.profit_days)))
+    pprint('profit:{:.2f}%'.format(loopback.get_total_profit()))
+    
+
 

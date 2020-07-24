@@ -190,7 +190,7 @@ def refreshStockInfo():
     sLoader.save_stock_basic(sFetcher.fetch_stock_basic())
 
 def main():
-    start_date, end_date = '20200720', '20200720'
+    start_date, end_date = '20200721', '20200723'
     refreshTickers(start_date, end_date)
     refreshStockInfo()
     # sLoader = StockLoader()

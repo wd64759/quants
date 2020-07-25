@@ -15,7 +15,7 @@ class MeanStrategy(TradeStrategyBase):
                 and pre_change < 0 
                 and cur_change < 0 
                 and sum([pre_change, cur_change]) < MeanStrategy.buy_change_threshold ):
-            print('buy on {}, at {:.2f}'.format(trade_day.date, trade_day.price))
+            # print('buy on {}, at {:.2f}'.format(trade_day.date, trade_day.price))
             self.keep_days = 1
         elif self.keep_days > 0:
             self.keep_days += 1
@@ -24,7 +24,7 @@ class MeanStrategy(TradeStrategyBase):
     def sell_strategy(self, trade_ind, trade_day, trade_hist):
         if (self.keep_days >= MeanStrategy.keep_days_threshold 
                 or self.profit_sum >= MeanStrategy.profit_change_threshold):
-            print('sell on {}, with profits chg {:.2f}'.format(trade_day.date, self.profit_sum))
+            # print('sell on {}, with profits chg {:.2f}'.format(trade_day.date, self.profit_sum))
             self.keep_days = 0
             self.profit_sum = 0
 

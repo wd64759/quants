@@ -19,3 +19,12 @@ def save_to_tbl(tbl, dataset):
 
 def trunc(tbl):
     run_sql('truncate table {}'.format(tbl))
+
+def time_me(fn):
+    import time
+    def _wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        x = fn(*args, **kwargs)
+        print("{} cost {:.3f} second".format(fn.__name__, time.perf_counter() - start))
+        return x
+    return _wrapper

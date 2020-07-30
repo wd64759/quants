@@ -14,10 +14,11 @@ class StrategySelector(object):
         self.trade_days = trade_days
 
     def run_loopback(self, keep_days_threshold, buy_change_threshold): 
-        self.chosen_strategy.set_buy_change_threshold(buy_change_threshold)
-        self.chosen_strategy.set_keep_days_threshold(keep_days_threshold)
+        current_strategy = self.chosen_strategy()
+        current_strategy.set_buy_change_threshold(buy_change_threshold)
+        current_strategy.set_keep_days_threshold(keep_days_threshold)
         
-        loopback = TradeLoopBack(self.trade_days, self.chosen_strategy)
+        loopback = TradeLoopBack(self.trade_days, current_strategy)
         loopback.execute_trade()
         return (loopback.get_total_profit(), keep_days_threshold, buy_change_threshold)
 
@@ -52,8 +53,8 @@ class StrategySelector(object):
 
 if __name__ == '__main__':
     trade_days = TradeDays(code='000725.SZ', base_date='20190101')
-    ss = StrategySelector(MeanStrategy(), trade_days)
-    # profit_rec = ss.rank_strategy(20)
-    profit_rec = ss.multi_proc_ranking(20)
+    ss = StrategySelector(MeanStrategy, trade_days)
+    profit_rec = ss.rank_strategy(20)
+    # profit_rec = ss.multi_proc_ranking(20)
     # 1.92
     pprint(profit_rec)

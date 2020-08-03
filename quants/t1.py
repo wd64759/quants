@@ -1,11 +1,35 @@
-from sqlalchemy import create_engine
-from config_loader import cf as config
+from concurrent.futures import ProcessPoolExecutor, as_completed, wait, ALL_COMPLETED
+from itertools import product
+from pprint import pprint
+import io
 
-dbURL = config.get('MYSQL_DB', 'conn')
-engine = create_engine(dbURL, encoding='utf-8', connect_args={'auth_plugin': 'mysql_native_password'})
-sample = engine.execute("select * from tickers limit 10").fetchall()
-# print(sample.fetchall())
+from trade_days import TradeDays
 
-findBest = lambda x: max(zip([t[8] for t in x], x))
-stock = findBest(sample)
-print(stock)
+import pickle
+
+results = []
+
+def calc(a, b):
+    return a*b
+
+def main():
+    with ProcessPoolExecutor(max_workers=2) as pool:
+        p1, p2 = range(1,20, 1), range(-5, -12, -1)
+        future_list = []
+        for a,b in product(p1, p2):
+            future_task = pool.submit(calc, a, b)
+            future_task.add_done_callback(lambda x: results.append(x.result()))
+            # future_list.append(future_task)
+        
+        # for job in as_completed(future_list):
+        #     results.append(job.result())
+            # print('{} to the end'.format(job.result()))
+        wait(future_list, return_when=ALL_COMPLETED)
+
+if __name__ == '__main__':
+    main()
+    trade_days = TradeDays(code='000725.SZ', base_date='20200101')
+    # print(sum(results))
+    f = io.BytesIO()
+    pickle.Pickler(f).dump(trade_days)
+    pprint(f)

@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
+import scipy.optimize as sco
 
 class Person(object):
     def __init__(self):
@@ -120,11 +121,7 @@ def complex_life(weights):
         me.live_one_day(life_choice[today_plan])
     return me
 
-if __name__ == '__main__':
-    # s = complex_life([0.4, 0.3, 0.3])
-    # print(s)
-
-    # mylife = complex_life([0.4, 0.3, 0.3])
+def brute_find_best():
     lives = []
     for _ in range(1000):
         weights = np.random.random(3)
@@ -133,4 +130,15 @@ if __name__ == '__main__':
         lives.append((someone, weights))
     best_life = sorted(lives, key=lambda x: x[0].happiness)[-1]
     print('archivement:{}, strategy:{}'.format(best_life[0], best_life[1]))
+    return best_life
     
+def optimize_best(weights):
+    if sum(weights) != 1:
+        return 0
+    return -complex_life(weights).happiness
+
+if __name__ == '__main__':
+    best_ops = sco.brute(optimize_best, ((0, 1.1, 0.1), (0, 1.1, 0.1), (0, 1.1, 0.1)))
+    print(best_ops)
+    x = complex_life([0.4, 0.3, 0.3])
+    print(x)
